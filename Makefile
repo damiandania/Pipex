@@ -15,7 +15,9 @@ NAME = pipex
 
 #~~~~~~SOURCES~~~~~~
 SRC_DIR = ./src
-SRCS	= 	main.c				
+SRCS	= 	main.c		\
+			init.c		\
+			error.c		\			
 
 SRCS := $(addprefix $(SRC_DIR)/, $(SRCS))
 

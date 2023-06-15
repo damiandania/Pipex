@@ -1,53 +1,36 @@
 #include "pipex.h"
 
-int main(int argc, char **argv, char **env)
+int	pipex(t_data *data)
 {
-	int pipefd[2]; // Descriptores de archivo para la tubería
-	pid_t pid;
+	int	exit_code;
 
-	if (argv != 5)
-		return (1/*mnesaje de error*/);
-
-	// Crear la tubería
-	if (pipe(pipefd) == -1) {
-		perror("Error al crear la tubería");
-		return 1;
+	if (pipe(data->pipe) == -1)
+		error_exit("Pipe: ", strerror(errno), 1, data);
+	data->child = 0;
+	while (data->child < data->cmd_nb)
+	{
+		data->cmd_arg = ft_split(data->av[data->child + 2], ' ');
+		if(!data->cmd_arg)
+			error_exit("error", "", 1, data);
+		data->cmd_path = get_cmd_path(data->cmd_arg[0], data);
+		
+		if (!data->cmd_path)
+			error_exit();
 	}
 
-	// Crear un nuevo proceso
-	pid = fork();
+	return (exit_code);
+}
 
-	if (pid == -1) {
-		perror("Error al crear el proceso hijo");
-		return 1;
-	} else if (pid == 0) {
-		// Código del proceso hijo
+int main(int ac, char **av, char **envp)
+{
+	t_data	data;
+	int		exit_code;
 
-		// Cerrar el descriptor de escritura de la tubería en el proceso hijo
-		close(pipefd[1]);
-
-		// Realizar alguna operación en el proceso hijo
-
-		// Cerrar el descriptor de lectura de la tubería en el proceso hijo
-		close(pipefd[0]);
-
-		// Terminar el proceso hijo
-		return 0;
-	} else {
-		// Código del proceso padre
-
-		// Cerrar el descriptor de lectura de la tubería en el proceso padre
-		close(pipefd[0]);
-
-		// Realizar alguna operación en el proceso padre
-
-		// Cerrar el descriptor de escritura de la tubería en el proceso padre
-		close(pipefd[1]);
-
-		// Esperar a que el proceso hijo termine
-		wait(NULL);
-
-		// Terminar el proceso padre
-		return 0;
-	}
+	if (av != 5)
+		return (error_msg("Usage: ", ERROR_ARGUMENT, "", 1));
+	if (!envp || envp[0][0] == '\0')
+		return (error_msg("Usage: ", ERROR_ENV, "", 1));
+	init_struc(data, ac, av, envp);
+	exit_code = pipex(&data);
+	return (exit_code);
 }

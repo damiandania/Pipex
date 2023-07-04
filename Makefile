@@ -1,40 +1,32 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/05/20 13:30:45 by ddania-c          #+#    #+#              #
-#    Updated: 2023/05/20 13:38:33 by ddania-c         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
-#~~~~~NAME~~~~~
+#~~~~~			NAME					~~~~~#
 NAME = pipex
 
-#~~~~~~SOURCES~~~~~~
+#~~~~~~			SOURCES					~~~~~~#
 SRC_DIR = ./src
-SRCS	= 	main.c		\
-			init.c		\
-			error.c		\			
+SRCS	= 	main.c					\
+			init.c					\
+			heredoc.c				\
+			close_fds.c				\
+			pipex.c					\
+			cmd_path.c				\
+			error_msg.c				\
+			utils.c					\
+			ft_split.c				\
+			ft_strjoin.c			\
+			ft_strnstr.c			\
+			ft_substr.c				\
+			get_next_line.c			\
+			get_next_line_utils.c
 
 SRCS := $(addprefix $(SRC_DIR)/, $(SRCS))
 
-#~~~~~~OBJETS~~~~~
+#~~~~~~			OBJETS					~~~~~~#
 OBJ_DIR = ./obj
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-#~~~~~~INCLUDES~~~~~~
+#~~~~~~			INCLUDES				~~~~~~#
 INCS = pipex.h
-
-#~~~~~~~		GNL						~~~~~~#
-GNL_DIR = ./get_next_line/
-GNL_OBJS = ${addprefix ${GNL_DIR}, ${GNL:.c=.o}}
-
-#~~~~~~~		LIBFT					~~~~~~#
-LIBFT_DIR = ./libft
-LIBFT_PATH = ${LIBFT_DIR}/libft.a
 
 #~~~~~~~		COMPILATION INFO		~~~~~~#
 CC = gcc
@@ -42,17 +34,12 @@ RM = rm -f
 CFLAGS = -Wall -Wextra -Werror
 LFLAGS:= -L $(LIBFT_DIR) -lft
 
-#~~~~~~~		OS OPTION				~~~~~~#
-# LINUX
-# MAC
-
 #~~~~~~~		COMPILATION RULES		~~~~~~#
 all: $(NAME)
 
-$(NAME): $(OBJS) $(GNL_OBJS)
-	@make -C ${LIBFT_DIR}
+$(NAME): $(OBJS)
 	@echo "Compiling Pipex..."
-	@$(CC) $(CFLAGS) $(OBJS) $(GNL_OBJS) -o $@
+	@$(CC) $(CFLAGS) $(OBJS) -o $@
 	@echo "OK\n"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -60,13 +47,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) -O3 -c $< -o $@
 
 clean:
-	@make clean -C ${LIBFT_DIR}
 	@echo "Deleting pipex object..."
-	@$(RM) $(OBJS) $(GNL_OBJS)
+	@$(RM) $(OBJS)
 	@echo "OK\n"
 
 fclean: clean
-	@make fclean -C ${LIBFT_DIR}
 	@echo "Deleting pipex executable..."
 	@$(RM) $(NAME)
 	@echo "OK\n"

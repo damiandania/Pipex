@@ -19,17 +19,17 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define ERR_ENV			"Environment variable not found.\n"
-# define ERR_ARG			"Invalid number of arguments.\n"
-# define ERR_INFILE			"Infile.\n"
-# define ERR_OUTFILE		"Outfile.\n"
-# define ERR_PIPE			"Error creating pipe.\n"
-# define ERR_HEREDOC_TMP	"Error creating or accessing the temporary heredoc file.\n"
-# define ERR_HEREDOC_READ	"Error reading input for here_doc.\n"
-# define ERR_CMD			"Command not found.\n"
-# define ERR_PID			"Error process id\n"
-# define ERR_EXEC			"Error executing command.\n"
-# define ERR_FORK			"Error creating child process.\n"
+# define ERR_ENV			"error: environment variable not found.\n"
+# define ERR_ARG			"error: invalid number of arguments.\n"
+# define ERR_INFILE			"infile."
+# define ERR_OUTFILE		"outfile."
+# define ERR_PIPE			"error creating pipe.\n"
+# define ERR_HEREDOC_TMP	"error creating or accessing the temporary heredoc file.\n"
+# define ERR_HEREDOC_READ	"error reading input for here_doc.\n"
+# define ERR_CMD			"command not found"
+# define ERR_PID			"error process id\n"
+# define ERR_EXEC			"error executing command.\n"
+# define ERR_FORK			"error creating child process.\n"
 
 typedef struct s_data
 {
@@ -60,37 +60,36 @@ void	here_doc(char *str, t_data *data);
 int		pipex(t_data *data);
 
 //		Close_fds
-void		close_all_fds(t_data *data);
-void		close_used_fds(t_data *data);
-void		close_unused_fds(t_data *data);
+void	close_all_fds(t_data *data);
+void	close_used_fds(t_data *data);
+void	close_unused_fds(t_data *data);
 
 //		Cmd_path
-char		*get_cmd_path(t_data *data, char *cmd);
+char	*get_cmd_path(t_data *data, char *cmd);
 
 //		GNL
-int	get_next_line(int fd, char **line, int val);
+int		get_next_line(int fd, char **line, int val);
 size_t	ft_str_len(const char *s);
-int	find_nl(char *str);
-int	some_error(char *str);
+int		find_nl(char *str);
+int		some_error(char *str);
 
+//		Utils
+int		ft_strlen(const char *s);
+void	free_strs(char *str, char **strs);
+void	*ft_malloc_zero(size_t count, size_t size);
+char	*ft_strdup(const char *s1);
+int		ft_strncmp(const char *s1, const char *s2, int n);
 
-int			msg(char *error);
-int			ft_strlen(const char *s);
-int			messg(char *str1, char *str2, char *str3, int erno);
-int			ft_strncmp(const char *s1, const char *s2, int n);
+char	**ft_split(char const *str, char c);
+char	*ft_strnstr(const char *big, const char *little, int len);
+char	*ft_substr(char const *s, int start, int len);
+char	*ft_strjoin(char const *s1, char const *s2);
+void	*ft_calloc(int nb, int size);
 
-void		msg_pipe(char *arg);
-void		error_msg(char *error);
-void		ft_bzero(void *s, int n);
-void		*ft_calloc(int nmemb, int size);
-void		connect_in_out_to_stand(t_data *data);
-void		free_strs(char *str, char **strs);
-void		*ft_malloc_zero(size_t count, size_t size);
-
-char		*ft_strdup(const char *s1);
-char		**ft_split(char const *str, char c);
-char		*ft_strjoin(char const *s1, char const *s2);
-char		*ft_substr(char const *s, int start, int len);
-char		*ft_strnstr(const char *big, const char *little, int len);
+//		Error_msg
+int		msg(char *error);
+int		messg(char *str1, char *str2, char *str3, int erno);
+void	msg_pipe(char *arg);
+void	error_msg(char *error);
 
 #endif

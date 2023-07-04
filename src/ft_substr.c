@@ -1,6 +1,6 @@
 #include "../includes/pipex.h"
 
-void	ft_bzero(void *s, int n)
+static void	ft_bzero(void *s, int n)
 {
 	unsigned char	*p;
 
@@ -13,14 +13,14 @@ void	ft_bzero(void *s, int n)
 	}
 }
 
-void	*ft_calloc(int nmemb, int size)
+void	*ft_calloc(int nb, int size)
 {
 	void	*res;
 
-	res = (void *)malloc(nmemb * size);
+	res = (void *)malloc(nb * size);
 	if (!res)
 		return (NULL);
-	ft_bzero(res, nmemb * size);
+	ft_bzero(res, nb * size);
 	return (res);
 }
 

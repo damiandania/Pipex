@@ -50,7 +50,7 @@ static char	**make_tab_of_paths(char **env)
 	return (long_path);
 }
 
-static char	*find_which_path(char **paths, char *cmd)
+static char	*find_the_path(char **paths, char *cmd)
 {
 	int		i;
 	char	*cmd_path;
@@ -82,12 +82,9 @@ char	*get_cmd_path(t_data *data, char *cmd)
 	paths = make_tab_of_paths(data->env);
 	if (!paths)
 		return (NULL);
-	data->cmd_path = find_which_path(paths, cmd);
+	data->cmd_path = find_the_path(paths, cmd);
 	if (!data->cmd_path)
-	{
 		messg(ERR_CMD, ": ", data->cmd_args[0], 1);
-		exit(EXIT_FAILURE);
-	}
 	free_strs(NULL, paths);
 	return (data->cmd_path);
 }

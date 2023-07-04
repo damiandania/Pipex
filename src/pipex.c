@@ -59,9 +59,16 @@ static int	parent(t_data *data)
 
 	close_all_fds(data);
 	exit_code = 1;
-	wpid = waitpid(data->pid[data->cmd_nbr - 1], &status, 0);
-	if (wpid && WIFEXITED(status))
-		exit_code = WEXITSTATUS(status);
+	while (data->child >= 0)
+	{
+		wpid = waitpid(data->pid[data->child], &status, 0);
+		if (wpid == data->pid[data->cmd_nbr - 1])
+		{
+			if ((data->child == (data->cmd_nbr - 1)) && WIFEXITED(status))
+				exit_code = WEXITSTATUS(status);
+		}
+		data->child--;
+	}
 	free(data->pipe);
 	free(data->pid);
 	return (exit_code);

@@ -32,13 +32,10 @@ void	msg_pipe(char *arg)
 
 int	messg(char *str1, char *str2, char *str3, int erno)
 {
-	char	c;
-
-	c = '\n';
 	ft_putstr_fd("pipex: ", 2);
 	ft_putstr_fd(str1, 2);
 	ft_putstr_fd(str2, 2);
 	ft_putstr_fd(str3, 2);
-	write(2, &c, 1);
+	ft_putstr_fd("\n", 2);
 	return (erno);
 }

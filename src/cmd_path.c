@@ -84,7 +84,7 @@ char	*get_cmd_path(t_data *data, char *cmd)
 		return (NULL);
 	data->cmd_path = find_the_path(paths, cmd);
 	if (!data->cmd_path)
-		messg(ERR_CMD, ": ", data->cmd_args[0], 1);
+		error_msg(ERR_CMD, ": ", data->cmd_args[0], 1);
 	free_strs(NULL, paths);
 	return (data->cmd_path);
 }

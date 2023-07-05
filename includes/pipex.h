@@ -1,5 +1,3 @@
-
-
 #ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
 
@@ -24,10 +22,10 @@
 # define ERR_INFILE			"infile."
 # define ERR_OUTFILE		"outfile."
 # define ERR_PIPE			"error creating pipe.\n"
-# define ERR_HEREDOC_TMP	"error creating or accessing the temporary heredoc file.\n"
+# define ERR_HEREDOC_TMP	"error creating temporary heredoc file.\n"
 # define ERR_HEREDOC_READ	"error reading input for here_doc.\n"
 # define ERR_CMD			"command not found"
-# define ERR_PID			"error process id\n"
+# define ERR_PID			"error process id.\n"
 # define ERR_EXEC			"error executing command.\n"
 # define ERR_FORK			"error creating child process.\n"
 
@@ -38,8 +36,8 @@ typedef struct s_data
 	char	*cmd_path;
 	char	**cmd_args;
 	int		arc;
-	int		in_fd;
-	int		out_fd;
+	int		infile_fd;
+	int		outfile_fd;
 	int		in;
 	int		out;
 	int		cmd_nbr;
@@ -49,7 +47,7 @@ typedef struct s_data
 	int		heredoc;
 }			t_data;
 
-//		Init
+//		Initialization
 void	init(t_data *data, int arc, char **arv, char **env);
 
 //		Heredoc
@@ -59,12 +57,12 @@ void	here_doc(char *str, t_data *data);
 //		Pipex
 int		pipex(t_data *data);
 
-//		Close_fds
+//		Close fds
 void	close_all_fds(t_data *data);
 void	close_used_fds(t_data *data);
 void	close_unused_fds(t_data *data);
 
-//		Cmd_path
+//		Command path
 char	*get_cmd_path(t_data *data, char *cmd);
 
 //		GNL
@@ -86,10 +84,9 @@ char	*ft_substr(char const *s, int start, int len);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_calloc(int nb, int size);
 
-//		Error_msg
-int		msg(char *error);
-int		messg(char *str1, char *str2, char *str3, int erno);
+//		Error message
+void	error_exit(char *error);
+int		error_msg(char *str1, char *str2, char *str3, int erno);
 void	msg_pipe(char *arg);
-void	error_msg(char *error);
 
 #endif

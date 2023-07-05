@@ -2,11 +2,11 @@
 
 static void	open_here_doc_tmp(t_data *data)
 {
-	data->in_fd = open(".heredoc.tmp", O_RDONLY);
-	if (data->in_fd < 0)
+	data->infile_fd = open(".heredoc.tmp", O_RDONLY);
+	if (data->infile_fd < 0)
 	{
 		unlink(".heredoc.tmp");
-		error_msg(ERR_HEREDOC_TMP);
+		error_exit(ERR_HEREDOC_TMP);
 	}
 }
 
@@ -31,7 +31,7 @@ void	here_doc(char *str, t_data *data)
 
 	file = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (file < 0)
-		error_msg(ERR_HEREDOC_READ);
+		error_exit(ERR_HEREDOC_READ);
 	while (1)
 	{
 		write(1, "pipe heredoc> ", 14);

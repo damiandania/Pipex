@@ -3,42 +3,39 @@
 static void	create_pipes(t_data *data)
 {
 	int	i;
-	int	res;
 
 	i = 1;
-	res = -1;
 	while (i < (data->cmd_nbr - 1))
 	{
-		res = pipe(data->pipe + (2 * i));
-		if (res == -1)
-			exit(EXIT_FAILURE);
+		if (pipe(data->pipe + (2 * i)) == -1)
+			error_exit(ERR_PIPE);
 		i++;
 	}
 }
 
-static void	get_input_file(t_data *data)
+static void	get_input(t_data *data)
 {
 	if (!ft_strncmp("here_doc", data->arv[1], 9))
 		here_doc(data->arv[2], data);
 	else
 	{
-		data->in_fd = open(data->arv[1], O_RDONLY);
-		if (data->in_fd == -1)
-			messg(strerror(errno), ": ", data->arv[1], 1);
+		data->infile_fd = open(data->arv[1], O_RDONLY);
+		if (data->infile_fd == -1)
+			error_msg(strerror(errno), ": ", data->arv[1], 1);
 	}
 }
 
-static void	get_output_file(t_data *data)
+static void	get_output(t_data *data)
 {
 	if (data->heredoc)
-		data->out_fd = open(data->arv[data->arc - 1],
+		data->outfile_fd = open(data->arv[data->arc - 1],
 				O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 	{
-		data->out_fd = open(data->arv[data->arc - 1],
+		data->outfile_fd = open(data->arv[data->arc - 1],
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (data->out_fd == -1)
-			messg(strerror(errno), ": ", data->arv[data->arc - 1], 1);
+		if (data->outfile_fd == -1)
+			error_msg(strerror(errno), ": ", data->arv[data->arc - 1], 1);
 	}
 }
 
@@ -49,8 +46,8 @@ static void	init_struc(t_data *data)
 	data->env = NULL;
 	data->cmd_path = NULL;
 	data->cmd_args = NULL;
-	data->in_fd = -1;
-	data->out_fd = -1;
+	data->infile_fd = -1;
+	data->outfile_fd = -1;
 	data->cmd_nbr = -1;
 	data->child = 0;
 	data->pipe = NULL;
@@ -66,11 +63,11 @@ void	init(t_data *data, int arc, char **arv, char **env)
 	data->arv = arv;
 	data->env = env;
 	data->cmd_nbr = arc - 3 - data->heredoc;
-	get_input_file(data);
-	get_output_file(data);
+	get_input(data);
+	get_output(data);
 	data->pipe = malloc(sizeof(int) * ((data->cmd_nbr - 1) * 2));
 	if (!data->pipe)
-		error_msg(ERR_PIPE);
+		error_exit(ERR_PIPE);
 	data->pid = malloc(sizeof(int) * (data->cmd_nbr + 1));
 	i = 0;
 	while (i < data->cmd_nbr)
@@ -79,6 +76,6 @@ void	init(t_data *data, int arc, char **arv, char **env)
 		i++;
 	}
 	if (!data->pid)
-		error_msg(ERR_PID);
+		error_exit(ERR_PID);
 	create_pipes(data);
 }

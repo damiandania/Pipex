@@ -4,10 +4,10 @@ void	close_unused_fds(t_data *data)
 {
 	int	i;
 
-	if (data->in != data->in_fd)
-		close(data->in_fd);
-	if (data->out != data->out_fd)
-		close(data->out_fd);
+	if (data->in != data->infile_fd)
+		close(data->infile_fd);
+	if (data->out != data->outfile_fd)
+		close(data->outfile_fd);
 	i = 0;
 	while (i < ((data->cmd_nbr - 1) * 2))
 	{
@@ -27,10 +27,10 @@ void	close_all_fds(t_data *data)
 {
 	int	i;
 
-	if (data->in_fd != -1)
-		close(data->in_fd);
-	if (data->out_fd != -1)
-		close(data->out_fd);
+	if (data->infile_fd != -1)
+		close(data->infile_fd);
+	if (data->outfile_fd != -1)
+		close(data->outfile_fd);
 	i = 0;
 	while (i < (data->cmd_nbr - 1) * 2)
 	{

@@ -1,21 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_msg.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/05 17:27:44 by ddania-c          #+#    #+#             */
+/*   Updated: 2023/07/05 17:27:45 by ddania-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex.h"
 
-static void	ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(char *s, int fd)
 {
-	if (!s)
-		return ;
-	while (*s != '\0')
-	{
-		write(fd, &(*s), 1);
-		s++;
-	}
-}
+	int	i;
+	int	ret;
 
-void	msg_pipe(char *arg)
-{
-	write(2, ERR_CMD, ft_strlen(ERR_CMD));
-	write(2, arg, ft_strlen(arg));
-	write(2, "\n", 1);
+	i = 0;
+	if (s)
+	{
+		while (s[i])
+		{
+			ret = write (fd, &s[i++], 1);
+			if (ret == -1)
+			{
+				perror("write error");
+				exit(1);
+			}
+		}
+	}
 }
 
 void	error_exit(char *error)

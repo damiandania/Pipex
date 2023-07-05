@@ -1,5 +1,17 @@
-#ifndef PIPEX_BONUS_H
-# define PIPEX_BONUS_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/05 17:31:21 by ddania-c          #+#    #+#             */
+/*   Updated: 2023/07/05 17:31:22 by ddania-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PIPEX_H
+# define PIPEX_H
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 100
@@ -88,5 +100,6 @@ void	*ft_calloc(int nb, int size);
 void	error_exit(char *error);
 int		error_msg(char *str1, char *str2, char *str3, int erno);
 void	msg_pipe(char *arg);
+void	ft_putstr_fd(char *s, int fd);
 
 #endif

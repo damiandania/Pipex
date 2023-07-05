@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/05 17:27:21 by ddania-c          #+#    #+#             */
+/*   Updated: 2023/07/05 17:33:20 by ddania-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex.h"
 
 static void	connect_io(t_data *data)
@@ -83,7 +95,8 @@ int	pipex(t_data *data)
 	data->child = 1;
 	while (data->child <= data->cmd_nbr)
 	{
-		data->cmd_args = ft_split(data->arv[data->heredoc + data->child + 1], ' ');
+		data->cmd_args = ft_split
+			(data->arv[data->heredoc + data->child + 1], ' ');
 		if (!data->cmd_args)
 			exit(EXIT_FAILURE);
 		data->cmd_path = get_cmd_path(data, data->cmd_args[0]);

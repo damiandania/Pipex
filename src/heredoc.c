@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/05 17:33:36 by ddania-c          #+#    #+#             */
+/*   Updated: 2023/07/05 17:33:37 by ddania-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/pipex.h"
 
 static void	open_here_doc_tmp(t_data *data)
@@ -34,13 +46,12 @@ void	here_doc(char *str, t_data *data)
 		error_exit(ERR_HEREDOC_READ);
 	while (1)
 	{
-		write(1, "pipe heredoc> ", 14);
+		ft_putstr_fd("pipe heredoc> ", 1);
 		if (get_next_line(0, &buf, 0) < 0)
 			exit(1);
 		if (!ft_strncmp(str, buf, ft_strlen(str) + 1))
 			break ;
-		write(file, buf, ft_strlen(buf));
-		write(file, "\n", 1);
+		ft_putstr_fd(buf, file);
 		free(buf);
 	}
 	free(buf);

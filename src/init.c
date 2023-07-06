@@ -6,7 +6,7 @@
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 17:27:16 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:27:17 by ddania-c         ###   ########.fr       */
+/*   Updated: 2023/07/06 15:54:13 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ void	init(t_data *data, int arc, char **arv, char **env)
 	data->cmd_nbr = arc - 3 - data->heredoc;
 	get_input(data);
 	get_output(data);
-	data->pipe = malloc(sizeof(int) * ((data->cmd_nbr - 1) * 2));
+	data->pipe = malloc(sizeof(data->pipe) * 2 * (data->cmd_nbr - 1));
 	if (!data->pipe)
 		error_exit(ERR_PIPE);
-	data->pid = malloc(sizeof(int) * (data->cmd_nbr + 1));
+	data->pid = malloc(sizeof(data->pid) * data->cmd_nbr);
 	i = 0;
 	while (i < data->cmd_nbr)
 	{

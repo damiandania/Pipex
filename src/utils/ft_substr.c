@@ -1,38 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:27:38 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:27:39 by ddania-c         ###   ########.fr       */
+/*   Created: 2021/11/26 16:50:44 by mcombeau          #+#    #+#             */
+/*   Updated: 2023/07/07 14:11:16 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	int		i;
-	int		size;
 	char	*res;
+	char	*src;
+	size_t	reslen;
 
-	if (!s1)
+	if (!s)
 		return (NULL);
-	size = ft_strlen(s1) + ft_strlen(s2);
-	i = 0;
-	res = (char *)malloc(sizeof(char) * (size + 1));
+	if (ft_strlen(s) < (size_t)start)
+		return (ft_strdup(""));
+	src = (char *)s + start;
+	if (ft_strlen(src) < len)
+		reslen = ft_strlen(src) + 1;
+	else
+		reslen = len + 1;
+	res = malloc(reslen * sizeof(char));
 	if (!res)
 		return (NULL);
-	while (i < ft_strlen(s1) || i < ft_strlen(s2))
-	{
-		if (i < ft_strlen(s1))
-			res[i] = s1[i];
-		if (i < ft_strlen(s2))
-			res[i + ft_strlen(s1)] = s2[i];
-		i++;
-	}
-	res[size] = '\0';
+	ft_strlcpy(res, src, reslen);
 	return (res);
 }

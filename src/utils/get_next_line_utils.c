@@ -1,25 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:27:24 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:33:28 by ddania-c         ###   ########.fr       */
+/*   Created: 2021/12/04 14:09:27 by mcombeau          #+#    #+#             */
+/*   Updated: 2023/07/07 14:11:14 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-int	ft_strlen(const char *s)
+int	contains_newline(const char *s)
 {
 	int	i;
 
 	i = 0;
-	while (s[i] != '\0')
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			return (1);
 		i++;
-	return (i);
+	}
+	return (0);
+}
+
+char	*join_strs(const char *s1, const char *s2)
+{
+	char	*s;
+	int		len;
+	int		i;
+
+	len = 0;
+	if (!s1 && !s2)
+		return (NULL);
+	while (s1 && s1[len])
+		len++;
+	i = 0;
+	while (s2 && s2[i])
+		i++;
+	s = ft_malloc_zero(len + i + 1, sizeof * s);
+	if (!s)
+		return (NULL);
+	len = -1;
+	while (s1 && s1[++len])
+		s[len] = s1[len];
+	i = -1;
+	while (s2 && s2[++i])
+		s[len + i] = s2[i];
+	return (s);
 }
 
 char	*ft_strdup(const char *s1)
@@ -32,7 +62,7 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	while (s1[i])
 		i++;
-	s2 = ft_malloc_zero(i + 1, sizeof (*s2));
+	s2 = ft_malloc_zero(i + 1, sizeof * s2);
 	if (!s2)
 		return (NULL);
 	i = 0;
@@ -64,38 +94,21 @@ void	*ft_malloc_zero(size_t count, size_t size)
 	return (r);
 }
 
-void	free_strs(char *str, char **strs)
+void	ft_free_strs(char **str, char **str2, char **str3)
 {
-	int	i;
-
-	if (str != NULL)
+	if (str && *str)
 	{
-		free(str);
-		str = NULL;
+		free(*str);
+		*str = NULL;
 	}
-	if (strs != NULL)
+	if (str2 && *str2)
 	{
-		i = 0;
-		while (strs[i])
-		{
-			if (strs[i] != NULL)
-				free(strs[i]);
-			i++;
-		}
-		free(strs);
-		strs = NULL;
+		free(*str2);
+		*str2 = NULL;
 	}
-}
-
-int	ft_strncmp(const char *s1, const char *s2, int n)
-{
-	while ((*s1 || *s2) && (n > 0))
+	if (str3 && *str3)
 	{
-		if (*s1 != *s2)
-			return ((unsigned char)*s1 - (unsigned char)*s2);
-		s1++;
-		s2++;
-		n--;
+		free(*str3);
+		*str3 = NULL;
 	}
-	return (0);
 }

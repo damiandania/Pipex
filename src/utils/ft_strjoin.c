@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:27:33 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:27:34 by ddania-c         ###   ########.fr       */
+/*   Created: 2021/11/26 18:18:15 by mcombeau          #+#    #+#             */
+/*   Updated: 2023/07/07 14:11:22 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-static void	ft_bzero(void *s, int n)
+void	ft_bzero(void *s, size_t n)
 {
 	unsigned char	*p;
 
@@ -25,39 +25,38 @@ static void	ft_bzero(void *s, int n)
 	}
 }
 
-void	*ft_calloc(int nb, int size)
+void	*ft_calloc(size_t count, size_t size)
 {
-	void	*res;
+	void	*r;
 
-	res = (void *)malloc(nb * size);
-	if (!res)
+	r = malloc(count * size);
+	if (!r)
 		return (NULL);
-	ft_bzero(res, nb * size);
-	return (res);
+	ft_bzero(r, size * count);
+	return (r);
 }
 
-char	*ft_substr(char const *s, int start, int len)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
+	char	*s;
+	size_t	len;
 	int		i;
-	int		j;
-	char	*res;
 
+	len = ft_strlen(s1) + ft_strlen(s2);
+	s = ft_calloc(len + 1, sizeof(char));
 	if (!s)
 		return (NULL);
-	if (start + len > ft_strlen(s))
-		len = ft_strlen(s) - start;
-	if (start >= ft_strlen(s))
-		len = 0;
-	res = (char *)ft_calloc(len + 1, sizeof(char));
-	if (!res)
-		return (NULL);
-	i = start;
-	j = 0;
-	while (j < len)
+	len = 0;
+	while (s1[len])
 	{
-		res[j] = s[i];
-		j++;
+		s[len] = s1[len];
+		len++;
+	}
+	i = 0;
+	while (s2[i])
+	{
+		s[len + i] = s2[i];
 		i++;
 	}
-	return (res);
+	return (s);
 }

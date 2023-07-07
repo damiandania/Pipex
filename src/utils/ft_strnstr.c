@@ -5,32 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:27:35 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:27:36 by ddania-c         ###   ########.fr       */
+/*   Created: 2021/11/25 23:07:33 by mcombeau          #+#    #+#             */
+/*   Updated: 2023/07/07 14:11:18 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-char	*ft_strnstr(const char *big, const char *little, int len)
+char	*ft_strnstr(const char *s1, const char *s2, size_t n)
 {
-	int	i;
-	int	j;
+	size_t	s2len;
+	size_t	i;
+	size_t	j;
 
-	if (!big && !len)
-		return (NULL);
+	s2len = ft_strlen(s2);
+	if (s1 == s2 || s2len == 0)
+		return ((char *)s1);
 	i = 0;
-	if (little[0] == '\0')
-		return ((char *)big);
-	while (big[i] != '\0' && len > i)
+	while (i < n && s1[i] != '\0')
 	{
 		j = 0;
-		if (big[i] == little[j])
+		while (s1[i + j] != '\0' && s2[j] != '\0'
+			&& (i + j) < n && s1[i + j] == s2[j])
 		{
-			while (little[j] != '\0' && little[j] == big[i + j] && len > j + i)
-				j++;
-			if (little[j] == '\0')
-				return ((char *)(big + i));
+			j++;
+			if ((j == n && j == s2len) || j == s2len)
+				return ((char *)(s1 + i));
 		}
 		i++;
 	}

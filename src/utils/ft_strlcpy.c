@@ -1,45 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:27:30 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:31:47 by ddania-c         ###   ########.fr       */
+/*   Created: 2021/11/24 14:16:24 by mcombeau          #+#    #+#             */
+/*   Updated: 2023/07/07 14:11:20 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../../includes/pipex.h"
 
-int	some_error(char *str)
-{
-	if (str)
-		free(str);
-	return (-1);
-}
-
-int	find_nl(char *str)
-{
-	if (str)
-	{
-		while (*str)
-		{
-			if (*str == '\n')
-				return (1);
-			str++;
-		}
-	}
-	return (0);
-}
-
-size_t	ft_str_len(const char *s)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
+	size_t	srclen;
 
+	srclen = ft_strlen(src);
+	if (dstsize == 0)
+		return (srclen);
 	i = 0;
-	if (s)
-		while (s[i])
-			i++;
-	return (i);
+	while (i < (dstsize - 1) && src[i] != '\0')
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (srclen);
 }

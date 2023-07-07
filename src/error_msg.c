@@ -5,45 +5,77 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:27:44 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:27:45 by ddania-c         ###   ########.fr       */
+/*   Created: 2023/07/06 18:02:47 by ddania-c          #+#    #+#             */
+/*   Updated: 2023/07/07 14:11:01 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	ft_putstr_fd(char *s, int fd)
+static void	close_pipe_fds(t_data *data)
 {
 	int	i;
-	int	ret;
 
 	i = 0;
-	if (s)
+	while (i < (data->nb_cmds - 1) * 2)
 	{
-		while (s[i])
-		{
-			ret = write (fd, &s[i++], 1);
-			if (ret == -1)
-			{
-				perror("write error");
-				exit(1);
-			}
-		}
+		close(data->pipe[i]);
+		i++;
 	}
 }
 
-void	error_exit(char *error)
+void	exit_error(int error_status, t_data *data)
 {
-	perror(error);
-	exit (1);
+	if (data)
+	{
+		close_fds(data);
+		if (data->pipe != NULL)
+			free(data->pipe);
+		if (data->pids != NULL)
+			free(data->pids);
+		if (data->cmd_options != NULL || data->cmd_path != NULL)
+			free_strs(data->cmd_path, data->cmd_options);
+	}
+	if (data->heredoc == 1)
+		unlink(".heredoc.tmp");
+	exit(error_status);
 }
 
-int	error_msg(char *str1, char *str2, char *str3, int erno)
+int	msg(char *str1, char *str2, int erno)
 {
 	ft_putstr_fd("pipex: ", 2);
 	ft_putstr_fd(str1, 2);
 	ft_putstr_fd(str2, 2);
-	ft_putstr_fd(str3, 2);
-	ft_putstr_fd("\n", 2);
 	return (erno);
+}
+
+void	close_fds(t_data *data)
+{
+	if (data->fd_in != -1)
+		close(data->fd_in);
+	if (data->fd_out != -1)
+		close(data->fd_out);
+	close_pipe_fds(data);
+}
+
+void	free_strs(char *str, char **strs)
+{
+	int	i;
+
+	if (str != NULL)
+	{
+		free(str);
+		str = NULL;
+	}
+	if (strs != NULL)
+	{
+		i = 0;
+		while (strs[i])
+		{
+			free(strs[i]);
+			i++;
+		}
+		free(strs);
+		strs = NULL;
+	}
 }

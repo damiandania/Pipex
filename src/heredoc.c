@@ -5,22 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:33:36 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:33:37 by ddania-c         ###   ########.fr       */
+/*   Created: 2023/07/06 17:48:12 by ddania-c          #+#    #+#             */
+/*   Updated: 2023/07/07 15:39:33 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-
-static void	open_here_doc_tmp(t_data *data)
-{
-	data->infile_fd = open(".heredoc.tmp", O_RDONLY);
-	if (data->infile_fd < 0)
-	{
-		unlink(".heredoc.tmp");
-		error_exit(ERR_HEREDOC_TMP);
-	}
-}
 
 int	check_heredoc(char *arg, t_data *data)
 {
@@ -36,26 +26,29 @@ int	check_heredoc(char *arg, t_data *data)
 	}
 }
 
-void	here_doc(char *str, t_data *data)
+void	get_heredoc(t_data *data)
 {
-	int		file;
-	char	*buf;
+	int		tmp_fd;
+	int		stdin_fd;
+	char	*line;
 
-	file = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (file < 0)
-		error_exit(ERR_HEREDOC_READ);
+	tmp_fd = open(".heredoc.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	stdin_fd = dup(STDIN_FILENO);
+	if (tmp_fd == -1)
+		exit_error(msg(ERR_HEREDOC, strerror(errno), 1), data);
+	line = "";
 	while (1)
 	{
 		ft_putstr_fd("pipe heredoc> ", 1);
-		if (get_next_line(0, &buf, 0) < 0)
-			exit(1);
-		if (!ft_strncmp(str, buf, ft_strlen(str) + 1))
+		line = get_next_line(stdin_fd);
+		if (line == NULL)
 			break ;
-		ft_putstr_fd(buf, file);
-		free(buf);
+		if (ft_strlen(data->av[2]) + 1 == ft_strlen(line)
+			&& !ft_strncmp(line, data->av[2], ft_strlen(data->av[2] + 1)))
+			close(stdin_fd);
+		else
+			ft_putstr_fd(line, tmp_fd);
+		free(line);
 	}
-	free(buf);
-	get_next_line(0, &buf, 1);
-	close(file);
-	open_here_doc_tmp(data);
+	close(tmp_fd);
 }

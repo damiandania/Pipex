@@ -5,63 +5,69 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 17:27:46 by ddania-c          #+#    #+#             */
-/*   Updated: 2023/07/05 17:31:40 by ddania-c         ###   ########.fr       */
+/*   Created: 2022/03/29 18:21:18 by mcombeau          #+#    #+#             */
+/*   Updated: 2023/07/07 14:11:03 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-static char	*get_init_path(char **env)
+static char	*get_env_path(char **envp)
 {
+	char	*path;
 	int		i;
-	char	*keyword;
-	char	*initial_p;
 
-	initial_p = NULL;
 	i = 0;
-	while (env[i] != NULL)
+	path = NULL;
+	while (envp[i] != NULL && envp[i][0] != '\0')
 	{
-		keyword = ft_strnstr(env[i], "PATH=", 5);
-		if (keyword)
+		path = ft_strnstr(envp[i], "PATH=", 5);
+		if (path)
 		{
-			initial_p = ft_substr(env[i], 5, (ft_strlen(env[i]) - 5));
+			path = ft_substr(path, 5, ft_strlen(path));
 			break ;
 		}
 		i++;
 	}
-	return (initial_p);
+	return (path);
 }
 
-static char	**make_tab_of_paths(char **env)
+static char	**make_usable_paths(char **paths)
 {
-	char	*initial_p;
-	char	**long_path;
-	char	*tmp;
 	int		i;
+	char	*tmp;
 
-	initial_p = get_init_path(env);
-	if (!initial_p)
-		return (NULL);
-	long_path = ft_split(initial_p, ':');
-	free_strs(initial_p, NULL);
-	if (!long_path)
-		return (NULL);
 	i = 0;
 	tmp = NULL;
-	while (long_path[i] != NULL)
+	while (paths[i])
 	{
-		tmp = long_path[i];
-		long_path[i] = ft_strjoin(long_path[i], "/");
+		tmp = paths[i];
+		paths[i] = ft_strjoin(paths[i], "/");
 		free_strs(tmp, NULL);
 		i++;
 	}
-	if (!long_path)
-		return (NULL);
-	return (long_path);
+	return (paths);
 }
 
-static char	*find_the_path(char **paths, char *cmd)
+static char	**get_env_paths(char **envp)
+{
+	char	*env_path_str;
+	char	**paths;
+
+	env_path_str = get_env_path(envp);
+	if (!env_path_str)
+		return (NULL);
+	paths = ft_split(env_path_str, ':');
+	free_strs(env_path_str, NULL);
+	if (!paths)
+		return (NULL);
+	paths = make_usable_paths(paths);
+	if (!paths)
+		return (NULL);
+	return (paths);
+}
+
+static char	*get_cmd_path(char *cmd, char **paths)
 {
 	int		i;
 	char	*cmd_path;
@@ -74,7 +80,7 @@ static char	*find_the_path(char **paths, char *cmd)
 		if (!cmd_path)
 		{
 			free_strs(NULL, paths);
-			exit(EXIT_FAILURE);
+			exit_error(msg("unexpected error", "", 1), NULL);
 		}
 		if (access(cmd_path, F_OK | X_OK) == 0)
 			return (cmd_path);
@@ -84,18 +90,19 @@ static char	*find_the_path(char **paths, char *cmd)
 	return (NULL);
 }
 
-char	*get_cmd_path(t_data *data, char *cmd)
+char	*get_cmd(char *cmd, t_data *data)
 {
-	char	**paths;
+	char	**env_paths;
+	char	*cmd_path;
 
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (ft_strdup(cmd));
-	paths = make_tab_of_paths(data->env);
-	if (!paths)
+	env_paths = get_env_paths(data->envp);
+	if (!env_paths)
 		return (NULL);
-	data->cmd_path = find_the_path(paths, cmd);
-	if (!data->cmd_path)
-		error_msg(ERR_CMD, ": ", data->cmd_args[0], 1);
-	free_strs(NULL, paths);
-	return (data->cmd_path);
+	cmd_path = get_cmd_path(cmd, env_paths);
+	if (!cmd_path)
+		msg(ERR_CMD, data->av[data->child + 2], 1);
+	free_strs(NULL, env_paths);
+	return (cmd_path);
 }

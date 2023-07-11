@@ -6,7 +6,7 @@
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 18:21:50 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/07/07 14:10:57 by ddania-c         ###   ########.fr       */
+/*   Updated: 2023/07/11 17:39:37 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ static void	get_output_file(t_data *data)
 {
 	if (data->heredoc == 1)
 		data->fd_out = open(data->av[data->ac - 1],
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
+				O_WRONLY | O_CREAT | O_APPEND, 0666);
 	else
 		data->fd_out = open(data->av[data->ac - 1],
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (data->fd_out == -1)
 		msg(strerror(errno), data->av[data->ac - 1], 1);
 }

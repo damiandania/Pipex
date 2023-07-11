@@ -6,7 +6,7 @@
 /*   By: ddania-c <ddania-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 18:22:36 by mcombeau          #+#    #+#             */
-/*   Updated: 2023/07/07 19:49:56 by ddania-c         ###   ########.fr       */
+/*   Updated: 2023/07/11 17:38:37 by ddania-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 
 # define ERR_ENV			"error: environment variable not found.\n"
 # define ERR_ARG			"error: invalid number of arguments.\n"
-# define ERR_INFILE			"no such file or directory: mak"
+# define ERR_INFILE			"no such file or directory: "
 # define ERR_OUTFILE		"openning outfile: "
 # define ERR_PIPE			"error creating pipe: "
-# define ERR_CMD_EMPTY		"command not valid"
+# define ERR_CMD_EMPTY		"command not valid\n"
 # define ERR_HEREDOC		"here_doc: "
 # define ERR_HEREDOC_TMP	"error creating temporary heredoc file.\n"
 # define ERR_HEREDOC_READ	"error reading input for here_doc.\n"
